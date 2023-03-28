@@ -1,85 +1,105 @@
 import './style.css'
+// Type Aliases
 
-let stringArray = ["Hello", "World"];
-let numberArray = [1, 2, 3];
-let guitars = ["Fender", "Gibson", 5124];
-let mixedArray = ["Hello", 1, 2, 3, true];
+type StringOrNumber = string | number;
 
-stringArray[0] = "Hi";
-stringArray.push("hey");
+type StringOrNumberArray = (string | number)[];
 
-guitars[0] = 2342234;
-guitars.unshift(234234);
-let bands: string[] = [];
-bands.push("Metallica");
-
-// Tuple
-let myTuple: [string, number, boolean] = ["Hello", 1, true];
-
-console.log(myTuple);
-
-let mixed = ["Hello", 1, 2, 3, true];
-
-// object
-let myObject: object;
-myObject = [];
-interface Gitarist {
+type Gitarist = {
   name?: string;
   age: number;
   band?: string;
-  albums: (string | number)[];
+  albums: StringOrNumberArray;
+};
+
+type userId = StringOrNumber;
+
+// Literal Types
+
+let myName: "Max";
+
+let userName: "Max" | "Anna";
+userName = "Anna";
+
+// Function Types
+const add = (a: number, b: number): number => {
+  return a + b;
+};
+const logMessage = (message: any): void => {
+  console.log(message);
+};
+logMessage("Hello World");
+logMessage(add(1, 2));
+
+let substruct = (a: number, b: number): number => {
+  return a - b;
+};
+
+logMessage(substruct(2, 1));
+
+// type AddFn = (a: number, b: number) => number;
+interface AddFn {
+  (a: number, b: number): number;
 }
 
-let evh: Gitarist = {
-  name: "Eddie Van Halen",
-  age: 65,
-  band: "Van Halen",
-  albums: [
-    "Van Halen",
-    "1984",
-    "5150",
-    "For Unlawful Carnal Knowledge",
-    "Balance",
-    "The Best of Both Worlds",
-    "A Different Kind of Truth",
-    2012,
-  ],
+let multiply: AddFn = (a: number, b: number) => {
+  return a * b;
 };
 
-let jp: Gitarist = {
-  //   name: "Jimi Hendrix",
-  age: 27,
-  band: "The Jimi Hendrix Experience",
-  albums: [
-    "Are You Experienced",
-    "Axis: Bold as Love",
-    "Electric Ladyland",
-    "Band of Gypsys",
-    "The Cry of Love",
-    "Smash Hits",
-    "South Saturn Delta",
-  ],
+logMessage(multiply(2, 2));
+
+// Optional Parameters
+const addAll = (a: number, b: number, c?: number): number => {
+  if (c !== undefined) {
+    return a + b + c;
+  }
+  return a + b;
+};
+// Default Parameters
+const sumAll = (a: number, b: number, c: number = 2): number => {
+  return a + b + c;
 };
 
-let greetGitarist = (gitarist: Gitarist) => {
-  return gitarist.name ? `Hello ${gitarist.name}!` : "Hello";
+logMessage(addAll(1, 2));
+logMessage(sumAll(1, 2));
+
+// Rest Parameters
+const total = (a: number, ...nums: number[]): number => {
+  return a + nums.reduce((prev, curr) => prev + curr);
 };
 
-console.log(greetGitarist(evh));
+logMessage(total(10, 2, 3, 4, 5));
 
-console.log(greetGitarist(jp));
+// Function Overloads
+const createError = (message: string, code: number): never => {
+  throw new Error(`${message}. Code: ${code}`);
+};
+// createError("An error occured", 500);
+
+const infinite = () => {
+  let i: number = 0;
+  while (true) {
+    i++;
+    if (i > 10) break;
+  }
+};
+// custom type guard
+const isNumber = (value: any): boolean => {
+  return typeof value === "number" ? true : false;
+};
+
+// use of the never type
+const numberOrString = (value: number | string): string => {
+  if (typeof value === "string") return "This is a string";
+  if (typeof value === "number") return "This is a number";
+  return createError("Value is not a string or number", 500);
+};
 
 
-enum Grade {
-    A = 1,
-    B,
-    C,
-    D,
-    E,
-    F
-}
 
-console.log(Grade.A); // 0
+
+
+
 
 
 
