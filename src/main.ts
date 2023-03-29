@@ -1,114 +1,53 @@
-import './style.css'
-// Type Aliases
+import './style.css';
 
-type StringOrNumber = string | number;
+type One = string;
+type Two = string | number;
+type Three = 'hello';
 
-type StringOrNumberArray = (string | number)[];
+let a: One = 'hello';
+console.log(a);
+let b = a as Two;
+let c = a as Three;
 
-type Gitarist = {
-  name?: string;
-  age: number;
-  band?: string;
-  albums: StringOrNumberArray;
-};
+console.log(c);
 
-type userId = StringOrNumber;
+let d = <One>'word';
+let e = <string | number>'word';
 
-// Literal Types
-
-let myName: "Max";
-
-let userName: "Max" | "Anna";
-userName = "Anna";
-
-// Function Types
-const add = (a: number, b: number): number => {
-  return a + b;
-};
-const logMessage = (message: any): void => {
-  console.log(message);
-};
-logMessage("Hello World");
-logMessage(add(1, 2));
-
-let substruct = (a: number, b: number): number => {
-  return a - b;
-};
-
-logMessage(substruct(2, 1));
-
-// type AddFn = (a: number, b: number) => number;
-interface AddFn {
-  (a: number, b: number): number;
-}
-
-let multiply: AddFn = (a: number, b: number) => {
-  return a * b;
-};
-
-logMessage(multiply(2, 2));
-
-// Optional Parameters
-const addAll = (a: number, b: number, c?: number): number => {
-  if (c !== undefined) {
-    return a + b + c;
+const addOrConcat = (a: number, b: number, c: 'add' | 'concat'): number | string => {
+  if (c === 'add') {
+    return a + b;
   }
-  return a + b;
-};
-// Default Parameters
-const sumAll = (a: number, b: number, c: number = 2): number => {
-  return a + b + c;
+  return `${a} ${b}`;
 };
 
-logMessage(addAll(1, 2));
-logMessage(sumAll(1, 2));
+let myValue: string = addOrConcat(1, 2, 'concat') as string;
 
-// Rest Parameters
-const total = (a: number, ...nums: number[]): number => {
-  return a + nums.reduce((prev, curr) => prev + curr);
-};
+// Be carefull because typescript sees no problem with this but a string is returned
+let myValue2: number = addOrConcat(1, 2, 'concat') as number;
 
-logMessage(total(10, 2, 3, 4, 5));
+// 10 as string;
+10 as unknown as string;
 
-// Function Overloads
-const createError = (message: string, code: number): never => {
-  throw new Error(`${message}. Code: ${code}`);
-};
-// createError("An error occured", 500);
+// the DOM
+const img = document.querySelector('img')!;
+// no null assertion
+const myImage = document.getElementById('myImage')! as HTMLImageElement;
 
-const infinite = () => {
-  let i: number = 0;
-  while (true) {
-    i++;
-    if (i > 10) break;
-  }
-};
-// custom type guard
-const isNumber = (value: any): boolean => {
-  return typeof value === "number" ? true : false;
-};
+const nextImage = <HTMLImageElement>document.getElementById('nextImage');
 
-// use of the never type
-const numberOrString = (value: number | string): string => {
-  if (typeof value === "string") return "This is a string";
-  if (typeof value === "number") return "This is a number";
-  return createError("Value is not a string or number", 500);
-};
+// img.src;
+// myImage.src;
 
+// let year: HTMLElement | null;
+// year = document.getElementById('year');
+// let thisYear: string = new Date().getFullYear().toString();
+// if (year) {
+//   year.setAttribute('datetime', thisYear);
+//   year.textContent = thisYear;
+// }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+const year = document.getElementById('year') as HTMLSpanElement;
+const thisYear: string = new Date().getFullYear().toString();
+year.setAttribute('datetime', thisYear);
+year.textContent = thisYear;
